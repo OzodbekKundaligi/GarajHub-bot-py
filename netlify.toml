@@ -4,13 +4,13 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://web-production-49c1.up.railway.app/api/:splat"
+  to = "https://web-production-89d53.up.railway.app/api/:splat"
   status = 200
   force = true
 
 [[redirects]]
   from = "/admin/*"
-  to = "https://web-production-49c1.up.railway.app/admin/:splat"
+  to = "https://web-production-89d53.up.railway.app/admin/:splat"
   status = 200
   force = true
 
