@@ -40,6 +40,14 @@ def internal_error(error):
 def not_found(error):
     return jsonify({'error': 'Not Found'}), 404
 
+
+# Ensure database is initialized when the module is imported (important for Gunicorn)
+try:
+    init_db()
+    logging.info('Database init called at import time')
+except Exception as e:
+    logging.error(f'Error initializing database at import: {e}')
+
 # ==================== DATABASE ====================
 def init_db():
     conn = sqlite3.connect('garajhub.db', check_same_thread=False)
