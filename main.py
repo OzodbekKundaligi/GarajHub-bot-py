@@ -1126,6 +1126,24 @@ def api_login():
     session_id = create_web_session(int(user_id))
     return jsonify({'success': True, 'session_id': session_id})
 
+
+# Cross-origin friendly login: create session and set cookie, then redirect to admin.
+@app.route('/auth/redirect_login')
+def redirect_login():
+    user_id = request.args.get('user_id')
+    if not user_id or not user_id.isdigit():
+        return redirect(url_for('login'))
+
+    user = get_user(int(user_id))
+    if not user or not user.get('is_admin'):
+        return redirect(url_for('login'))
+
+    session_id = create_web_session(int(user_id))
+    resp = redirect(url_for('admin_dashboard'))
+    # Set cookie for the backend domain so subsequent requests from browser include it
+    resp.set_cookie('session_id', session_id, httponly=True, samesite='None', secure=True)
+    return resp
+
 @app.route('/admin')
 def admin_dashboard():
     session_id = request.cookies.get('session_id')
