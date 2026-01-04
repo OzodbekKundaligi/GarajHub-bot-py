@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,42 +21,42 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .login-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             width: 100%;
             max-width: 400px;
         }
-        
+
         .login-header {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             padding: 40px 20px;
             text-align: center;
             color: white;
         }
-        
+
         .login-header h1 {
             font-size: 28px;
             margin-bottom: 10px;
             font-weight: 600;
         }
-        
+
         .login-header p {
             opacity: 0.9;
             font-size: 14px;
         }
-        
+
         .login-form {
             padding: 40px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -63,7 +64,7 @@
             font-weight: 500;
             font-size: 14px;
         }
-        
+
         .form-group input {
             width: 100%;
             padding: 12px 16px;
@@ -72,12 +73,12 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
+
         .form-group input:focus {
             outline: none;
             border-color: #4f46e5;
         }
-        
+
         .login-btn {
             width: 100%;
             padding: 14px;
@@ -90,29 +91,29 @@
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        
+
         .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
         }
-        
+
         .alert {
             padding: 12px;
             border-radius: 8px;
             margin-bottom: 20px;
             display: none;
         }
-        
+
         .alert-success {
             background: #10b981;
             color: white;
         }
-        
+
         .alert-error {
             background: #ef4444;
             color: white;
         }
-        
+
         .api-config {
             margin-top: 20px;
             padding: 15px;
@@ -120,7 +121,7 @@
             border-radius: 10px;
             border-left: 4px solid #4f46e5;
         }
-        
+
         .api-config p {
             color: #6b7280;
             font-size: 12px;
@@ -128,26 +129,27 @@
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <div class="login-header">
             <h1>GarajHub Admin</h1>
             <p>Startuplar platformasi boshqaruvi</p>
         </div>
-        
+
         <div class="alert" id="alert"></div>
-        
+
         <form class="login-form" id="loginForm">
             <div class="form-group">
                 <label for="user_id">Telegram ID</label>
                 <input type="text" id="user_id" placeholder="Masalan: 123456789" required>
             </div>
-            
+
             <button type="submit" class="login-btn">
                 Kirish
             </button>
         </form>
-        
+
         <div class="api-config">
             <p><strong>API URL:</strong></p>
             <p id="apiUrl" style="font-family: monospace; color: #4f46e5; font-size: 11px; word-break: break-all;"></p>
@@ -156,20 +158,20 @@
 
     <script>
         // API URL ni belgilash (Netlify da deployment uchun)
-        const API_BASE_URL = window.location.hostname === 'localhost' 
+        const API_BASE_URL = window.location.hostname === 'localhost'
             ? 'http://localhost:5000'
-            : 'https://garajhub-bot-prod.up.railway.app'; // Railway domenini o'zgartiring
-        
-        document.getElementById('apiUrl').textContent = API_BASE_URL;
-        
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const userId = document.getElementById('user_id').value;
-            const alert = document.getElementById('alert');
-            
-            alert.style.display = 'none';
-            
+            : 'https://web-production-49c1.up.railway.app'
+
+        document.getElementById('apiUrl').textContent = API_BASE_URL
+
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault()
+
+            const userId = document.getElementById('user_id').value
+            const alert = document.getElementById('alert')
+
+            alert.style.display = 'none'
+
             try {
                 const response = await fetch(API_BASE_URL + '/api/login', {
                     method: 'POST',
@@ -178,32 +180,33 @@
                     },
                     body: JSON.stringify({ user_id: userId }),
                     credentials: 'include'
-                });
-                
-                const data = await response.json();
-                
+                })
+
+                const data = await response.json()
+
                 if (data.success) {
-                    document.cookie = `session_id=${data.session_id}; path=/; max-age=3600`;
-                    
-                    alert.className = 'alert alert-success';
-                    alert.textContent = 'Muvaffaqiyatli kirildi! Yo\'naltirilmoqda...';
-                    alert.style.display = 'block';
-                    
+                    document.cookie = `session_id=${data.session_id}; path=/; max-age=3600`
+
+                    alert.className = 'alert alert-success'
+                    alert.textContent = 'Muvaffaqiyatli kirildi! Yo\'naltirilmoqda...'
+                    alert.style.display = 'block'
+
                     setTimeout(() => {
-                        window.location.href = API_BASE_URL + '/admin';
-                    }, 1000);
+                        window.location.href = API_BASE_URL + '/admin'
+                    }, 1000)
                 } else {
-                    alert.className = 'alert alert-error';
-                    alert.textContent = data.message || 'Xatolik yuz berdi!';
-                    alert.style.display = 'block';
+                    alert.className = 'alert alert-error'
+                    alert.textContent = data.message || 'Xatolik yuz berdi!'
+                    alert.style.display = 'block'
                 }
             } catch (error) {
-                alert.className = 'alert alert-error';
-                alert.textContent = 'Server bilan aloqa xatosi: ' + error.message;
-                alert.style.display = 'block';
-                console.error(error);
+                alert.className = 'alert alert-error'
+                alert.textContent = 'Server bilan aloqa xatosi: ' + error.message
+                alert.style.display = 'block'
+                console.error(error)
             }
         });
     </script>
 </body>
+
 </html>
