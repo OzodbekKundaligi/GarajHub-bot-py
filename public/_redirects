@@ -1,0 +1,3 @@
+# Netlify redirects - Railway API ga yo'naltiradigan
+/api/* https://garajhub-bot-prod.up.railway.app/api/:splat 200
+/admin/* https://garajhub-bot-prod.up.railway.app/admin/:splat 200
